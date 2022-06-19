@@ -1,0 +1,58 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#outer-cont {
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*align-items: center;*/
+
+    /*border: 1px solid black;*/
+    /*width: 55%;*/
+    /*margin: 20px auto 0 auto;*/
+    /*padding: 20px;*/
+}
+#login-cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid black;
+    width: 75%;
+}
+
+#admin-cont {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+}
+
+/*table {*/
+/*    border-collapse: collapse;*/
+/*    background: #fff;*/
+/*    border-radius: 10px;*/
+/*    overflow: hidden;*/
+/*    width: 100%;*/
+/*    margin: 0 auto;*/
+/*    position: relative;*/
+/*}*/
+
+/*table thead tr {*/
+/*    height: 60px;*/
+/*    background: #36304a;*/
+/*    color: #ffffff;*/
+/*}*/
+
+/*.column1 {*/
+/*    width: 260px;*/
+/*    padding-left: 40px;*/
+/*}*/
+
+/*.column2 {*/
+/*    width: 160px;*/
+/*}*/
+
+/*.column3 {*/
+/*    width: 245px;*/
+/*}*/
