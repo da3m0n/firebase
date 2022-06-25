@@ -1,10 +1,11 @@
 class UserPage {
     constructor() {
         this.userCont = document.getElementById('users-cont');
-
+        this.usersTable();
     }
     usersTable(){
-        // console.log(this.userCont);
+
+        console.log('userTable');
         return this.userCont;
     }
 }
@@ -14,7 +15,8 @@ class Pages {
         this.pages = {
             login: {divs: [document.getElementById('login-cont')]},
             users: {divs: [userPage.usersTable()]},
-            admin: {divs:[document.getElementById('admin-cont')]}
+            admin: {divs:[document.getElementById('admin-cont')]},
+            game: {divs: [document.getElementById('game-cont')]}
         };
     }
 
@@ -62,6 +64,74 @@ class Utils {
             return false;
         }
         return field.length > 0;
+    }
+
+    makeGameControlScreen(userData) {
+        // let label = document.createElement('label');
+        // label.append(name);
+        let title = document.getElementsByClassName('header ')[0];
+        let nameTextNode = document.createTextNode(userData.name);
+        let gameInfoCont = document.getElementById('game-info-cont');
+        title.append(nameTextNode);
+
+        gameInfoCont.append(title);
+
+        return gameInfoCont;
+    }
+
+    getRandomColor() {
+        let r = 255 * Math.random() | 0,
+            g = 255 * Math.random() | 0,
+            b = 255 * Math.random() | 0;
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+
+    random(min, max) {
+        return Math.round(Math.random() * (max - min) + min)
+    }
+
+    distance(x1, y1, x2, y2) {
+        const xDist = x2 - x1;
+        const yDist = y2 - y1;
+        return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+    }
+
+    overlaps(balls, x, y, radius){
+        for (let i = 0; i < balls.length; i++) {
+            let dist1 = this.distance(x, y, balls[i].pos.x, balls[i].pos.y);
+            if(dist1 < radius + balls[i].radius) {
+                // console.log('overlaps...');
+                return true;
+            }
+        }
+        return false;
+    }
+
+    getClickPosition(event) {
+        const x = event.clientX - cnv.offsetLeft;
+        const y = event.clientY - cnv.offsetTop;
+        return {x: x, y: y};
+    }
+
+    pointInCircle(x, y, cx, cy, radius) {
+        let distanceSquared = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+        return distanceSquared <= radius * radius;
+    }
+
+
+    detectCollisions2(balls){
+        for (let i = 0; i < balls.length; i++) {
+            balls[i].isColliding = false;
+        }
+
+        for (let i = 0; i < balls.length; i++) {
+            const ballA = balls[i];
+
+            if(this.overlaps(balls, ballA.pos.x, ballA.pos.y, ballA.radius)) {
+                // console.log('overlapping...');
+                // this.resolveColl(ballA, ballB);
+            }
+        }
     }
 
 }

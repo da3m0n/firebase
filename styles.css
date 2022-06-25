@@ -1,33 +1,105 @@
 body {
     margin: 0;
     padding: 0;
+    background: #919495c7;
 }
 
 #outer-cont {
     /*display: flex;*/
     /*flex-direction: column;*/
     /*align-items: center;*/
-
-    /*border: 1px solid black;*/
-    /*width: 55%;*/
-    /*margin: 20px auto 0 auto;*/
-    /*padding: 20px;*/
+    width: 100%;
+    max-width: 1245px;
+    height: 500px;
+    /*max-height: 1000px;*/
+    margin: 140px auto 0 auto;
+    padding: 20px;
+    background-color: #0dcaf0;
+    border-radius: 5px;
+    box-shadow: inset 0 -3em 3em rgb(0 0 0 / 10%), 0 0 0 2px rgb(0 0 0), 0.3em 0.3em 1em rgb(0 0 0 / 30%);
 }
 #login-cont {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0 auto 0 auto;
     border: 1px solid black;
-    width: 75%;
+    width: 100%;
+    max-width: 450px;
+}
+
+#login-cont input {
+    margin: 5px;
+    width: 300px;
+}
+.separator{
+    display: flex;
+    align-items: center;
+}
+
+.separator h5{
+    /*padding: 0 2rem; !* creates the space *!*/
+    padding: 0;
+    margin: 0 25px 0 25px;
+}
+
+.separator .line{
+    flex: 1;
+    height: 3px;
+    background-color: #000;
+    width: 100px;
 }
 
 #admin-cont {
     display: flex;
     flex-direction: column;
-    border: 1px solid lightgrey;
+    /*border: 1px solid lightgrey;*/
     border-radius: 5px;
+    width: 100%;
 }
 
+.btn-cont {
+    display: flex;
+    align-items: center;
+}
+
+button {
+    border: 1px solid #000000;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+#game-cont {
+    display: flex;
+    flex-direction: row;
+    /*width: 100%;*/
+    height: 100%;
+    /*background: red;*/
+    /*border: 2px solid hotpink;*/
+}
+
+#game-cont .header {
+    font-family: sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+}
+#game-info-cont {
+    flex-grow: 2;
+    background: green;
+    max-width: 380px;
+    padding: 10px;
+    border-bottom-left-radius:5px;
+    border-top-left-radius: 5px;
+
+}
+#game {
+    display: inline-flex;
+    /*flex-grow: 4;*/
+    height: 100%;
+    background: blue;
+    border-top-right-radius:5px;
+    border-bottom-right-radius: 5px;
+}
 /*table {*/
 /*    border-collapse: collapse;*/
 /*    background: #fff;*/

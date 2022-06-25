@@ -5,32 +5,55 @@
 
 
 let setup = (function () {
-    let db = null;
-    let pages = null;
+	let db = null;
+	let pages = null;
 
-    return function setup() {
-        pages = new Pages();
-        db = new DB();
+	return function setup() {
+		pages = new Pages();
+		db = new DB();
 
-        pages.show('login');
-        // pages.show('admin');
+		pages.show('login');
+		stopAnimation();
 
-        let signInBtn = document.getElementById('sign-in');
-        signInBtn.addEventListener('click', (e) => {
-            db.signIn();
-        });
+		let signInBtn = document.getElementById('sign-in');
+		signInBtn.addEventListener('click', (e) => {
+			db.signIn();
+			let userPage = new UserPage();
+		});
 
-        let registerBtn = document.getElementById('register-user');
-        registerBtn.addEventListener('click', (e) => {
-            db.register();
-        })
+		let registerBtn = document.getElementById('register-user');
+		registerBtn.addEventListener('click', (e) => {
+			db.register();
+		});
 
-        let backBtn = document.getElementById('back-btn');
-        backBtn.addEventListener('click', (e) => {
-            console.log('xxxxxxxx');
-            pages.show('login');
-        })
+		let backBtn = document.getElementById('back-btn');
+		backBtn.addEventListener('click', (e) => {
+			pages.show('game');
+		});
 
-    }
+		let signInGoogleBtn = document.getElementById('sign-in-google');
+		signInGoogleBtn.addEventListener('click', (e) => {
+			db.signInGoogle();
+		});
+
+		let adminBtn = document.getElementById('admin-btn');
+		adminBtn.addEventListener('click', (e) => {
+			pages.show('admin');
+		});
+
+		let startGameBtn = document.getElementById('start-game-btn');
+		startGameBtn.addEventListener('click', (e) => {
+			startAnimation();
+			db.startGame();
+		});
+
+
+		document.addEventListener('click', (e) => {
+			if(e.target && e.target.id === 'del-btn') {
+				console.log('del-btn clicked');
+				db.deleteUser(e.target.value);
+			}
+		})
+	};
 })();
 

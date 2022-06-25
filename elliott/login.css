@@ -1,0 +1,64 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(#ff6f69, #ffcc5c);
+
+}
+
+#loginCont {
+    width: 450px;
+    height: 600px;
+    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: inset 0 -3em 3em rgba(0, 0, 0, 0.1),
+    0 0 0 2px rgb(0, 0, 0),
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+.flexCont {
+    margin: auto;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#titleCont {
+    /*border: 1px solid blue;*/
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid transparent;
+    /*border-bottom: 1px solid blue;*/
+    /*border-image: linear-gradient(25deg, #FFBE0B, #FB5607, #FF006E, #8338EC, #3A86FF) 20;*/
+    background-image: linear-gradient(#ff6f69, #ffcc5c);
+    margin-bottom: 5px;
+}
+
+#loginDetailsCont {
+    border: 1px solid green;
+    width: 75%;
+    height: 100%;
+    /*float: left;*/
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+}
+
+.loginInputField {
+    padding: 10px;
+}
+
+#btnCont {
+    border: 1px solid green;
+}
+
+.loginBtns {
+}
+

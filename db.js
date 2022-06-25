@@ -14,7 +14,7 @@ class DB {
 
         this.auth = firebase.auth();
         this.db = firebase.database();
-
+        this.UTILS = new Utils();
     }
 
     register() {
@@ -50,7 +50,10 @@ class DB {
                 }
 
                 dbRef.child('users/' + user.uid).set(userData);
-                this.pages.show('admin');
+                UTILS.makeGameControlScreen(userData);
+
+                this.pages.show('game');
+                // this.pages.show('admin');
             })
             .catch((e) => {
                 let errorCode = e.code;
@@ -61,7 +64,10 @@ class DB {
 
     signIn() {
         let UTILS = new Utils();
+
         function addUsersToTable(vals, snapshot) {
+            // remove delete button
+
             let tblId = document.getElementById('users-tbl');
             // let newRow = tblId.insertRow(-1);
             // let newCell = newRow.insertCell(0);
@@ -73,15 +79,25 @@ class DB {
             for(let v in vals){
                 let td = document.createElement('td');
                 td.innerText = vals[v];
-                tRow.appendChild(td);
+                tRow.append(td);
             }
+
+            let delCol = document.createElement('td');
+            let delBtn = document.createElement('button');
+            let delText = document.createTextNode('Delete');
+            delBtn.append(delText);
+            delBtn.setAttribute('type', 'button');
+            delBtn.setAttribute('value', snapshot.key);
+            delBtn.setAttribute('id', 'del-btn');
+
+            delCol.append(delBtn);
+            tRow.append(delCol);
             tblId.appendChild(tRow);
-            // newCell.appendChild(newText);
         }
 
-        let dbRef = this.db.ref();//.limit(1);
-        dbRef.child('users');
-        console.log(dbRef);
+        function updateUsersTable(childSnapShot) {
+            console.log('snapshot', childSnapShot.val());
+        }
 
         this.db.ref('users').once('value', (snapshot) => {
 
@@ -99,16 +115,64 @@ class DB {
                 };
 
                 let date = new Date(val.lastLogin).toLocaleDateString('en-US', options);
-                let ret = {
+                let userData = {
                     name: val.name,
                     email: val.email,
                     lastLogin: date};
-                addUsersToTable(ret, childSnapShot);
-
+                addUsersToTable(userData, childSnapShot);
+                updateUsersTable(childSnapShot);
+                // return userData;
             });
         });
 
-        this.pages.show('admin');
+        // console.log('userData', userData);
+        // this.pages.show('admin');
+
+
+        this.pages.show('game');
+
+    }
+
+    startGame() {
+        this.pages.show('game');
+        console.log('start game');
+    }
+
+    deleteUser(id) {
+        this.db.ref('users/' + id).remove();
+        let users = this.db.ref('users/');
+        users.on('value', (snapshot) => {
+            const data = snapshot.val();
+            console.log('data', data);
+        });
+    }
+
+    signInGoogle() {
+        let provider = new firebase.auth.GoogleAuthProvider();
+
+        firebase.auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+                /** @type {firebase.auth.OAuthCredential} */
+                let credential = result.credential;
+
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                let token = credential.accessToken;
+                // The signed-in user info.
+                let user = result.user;
+
+                this.pages.show('admin');
+                // ...
+            }).catch((error) => {
+            // Handle Errors here.
+            let errorCode = error.code;
+            let errorMessage = error.message;
+            // The email of the user's account used.
+            let email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            let credential = error.credential;
+            console.log(errorCode, errorMessage);
+        });
     }
 
 }
