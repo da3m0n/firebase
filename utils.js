@@ -1,137 +1,198 @@
 class UserPage {
-    constructor() {
-        this.userCont = document.getElementById('users-cont');
-        this.usersTable();
-    }
-    usersTable(){
 
-        console.log('userTable');
-        return this.userCont;
-    }
+	constructor() {
+		this.userCont = document.getElementById('users-cont');
+		// this.usersTable();
+
+	}
+
+	makeUserTable(tblInfo) {
+		if (tblInfo === null || tblInfo === undefined) {
+			return this.userCont;
+		}
+
+		function removeAllChildNodes(parent) {
+			while (parent.firstChild) {
+				parent.removeChild(parent.firstChild);
+			}
+		}
+		let tblId = document.getElementById('users-tbl');
+		removeAllChildNodes(tblId);
+		let usersArr = [];
+
+		tblInfo.then((childSnapShot) => {
+			for (let v in childSnapShot.val()) {
+				let userData = {};
+				let user = {};
+
+				let users = childSnapShot.val()[v];
+
+				delete users.password;
+				// doing this to set order. Better way???
+				user.name = users.name;
+				user.email = users.email;
+				user.lastLogin = users.lastLogin;
+
+				userData[v] = user;
+				usersArr.push(userData);
+			}
+
+			let rowCnt = 0;
+			usersArr.forEach((user) => {
+				console.log('user', user);
+				let tRow = document.createElement('tr');
+
+				for (const [key, value] of Object.entries(user)) {
+					for(let u in value) {
+						let td = document.createElement('td');
+						td.innerText = value[u];
+						tRow.append(td);
+					}
+					let delCol = document.createElement('td');
+					let delBtn = document.createElement('button');
+					let delText = document.createTextNode('Delete');
+					delBtn.append(delText);
+					delBtn.setAttribute('type', 'button');
+					delBtn.setAttribute('value', key);
+					delBtn.setAttribute('id', 'del-btn');
+					delCol.append(delBtn);
+					tRow.append(delCol);
+				}
+				// tblId.insertRow(tRow);
+				tblId.append(tRow);
+			});
+
+		}, (rej) => {
+			console.log('reject', rej);
+		});
+
+		return this.userCont;
+	}
 }
+
 class Pages {
-    constructor() {
-        let userPage = new UserPage();
-        this.pages = {
-            login: {divs: [document.getElementById('login-cont')]},
-            users: {divs: [userPage.usersTable()]},
-            admin: {divs:[document.getElementById('admin-cont')]},
-            game: {divs: [document.getElementById('game-cont')]}
-        };
-    }
+	constructor() {
+		let userPage = new UserPage();
+		this.pages = {
+			login: {divs: [document.getElementById('login-cont')]},
+			users: {divs: [userPage.makeUserTable()]},
+			admin: {divs: [document.getElementById('admin-cont')]},
+			game: {divs: [document.getElementById('game-cont')]}
+		};
+	}
 
-    show(page) {
-        this.show_(page);
-    }
+	show(page) {
+		this.show_(page);
+	}
 
-    show_(page) {
-        // hide all pages
-        for(let p in this.pages) {
-            let pageInfo = this.pages[p];
-            pageInfo.divs.forEach((div) => {
-                div.style.display = 'none';
-            });
-        }
+	show_(page) {
+		// hide all pages
+		for (let p in this.pages) {
+			let pageInfo = this.pages[p];
+			pageInfo.divs.forEach((div) => {
+				div.style.display = 'none';
+			});
+		}
 
-        let pageInfo = this.pages[page];
-        pageInfo.divs.forEach((div) => {
-            div.style.display = 'flex';
-        });
+		let pageInfo = this.pages[page];
+		pageInfo.divs.forEach((div) => {
+			div.style.display = 'flex';
+		});
 
-        if(pageInfo.initialize) {
-            pageInfo.initialize(pageInfo.divs);
-        }
-    }
+		if (pageInfo.initialize) {
+			pageInfo.initialize(pageInfo.divs);
+		}
+	}
 }
 
 let pages = null;
 
 class Utils {
-    constructor() {
-    }
+	constructor() {
+	}
 
-    validateEmail(email) {
-        let expression = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
-        return expression.test(email) === true;
-    }
+	validateEmail(email) {
+		let expression = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/;
+		return expression.test(email) === true;
+	}
 
-    validatePassword(password) {
-        return password.length >= 6;
-    }
+	validatePassword(password) {
+		return password.length >= 6;
+	}
 
-    validateField(field) {
-        if(field === null) {
-            return false;
-        }
-        return field.length > 0;
-    }
+	validateField(field) {
+		if (field === null) {
+			return false;
+		}
+		return field.length > 0;
+	}
 
-    makeGameControlScreen(userData) {
-        // let label = document.createElement('label');
-        // label.append(name);
-        let title = document.getElementsByClassName('header ')[0];
-        let nameTextNode = document.createTextNode(userData.name);
-        let gameInfoCont = document.getElementById('game-info-cont');
-        title.append(nameTextNode);
+	makeGameControlScreen(userData) {
+		// let label = document.createElement('label');
+		// label.append(name);
+		let title = document.getElementsByClassName('header ')[0];
+		let nameTextNode = document.createTextNode(userData.name);
+		let gameInfoCont = document.getElementById('game-info-cont');
+		title.append(nameTextNode);
 
-        gameInfoCont.append(title);
+		gameInfoCont.append(title);
 
-        return gameInfoCont;
-    }
+		return gameInfoCont;
+	}
 
-    getRandomColor() {
-        let r = 255 * Math.random() | 0,
-            g = 255 * Math.random() | 0,
-            b = 255 * Math.random() | 0;
-        return 'rgb(' + r + ',' + g + ',' + b + ')';
-    }
+	getRandomColor() {
+		let r = 255 * Math.random() | 0,
+			g = 255 * Math.random() | 0,
+			b = 255 * Math.random() | 0;
+		return 'rgb(' + r + ',' + g + ',' + b + ')';
+	}
 
-    random(min, max) {
-        return Math.round(Math.random() * (max - min) + min)
-    }
+	random(min, max) {
+		return Math.round(Math.random() * (max - min) + min);
+	}
 
-    distance(x1, y1, x2, y2) {
-        const xDist = x2 - x1;
-        const yDist = y2 - y1;
-        return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
-    }
+	distance(x1, y1, x2, y2) {
+		const xDist = x2 - x1;
+		const yDist = y2 - y1;
+		return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+	}
 
-    overlaps(balls, x, y, radius){
-        for (let i = 0; i < balls.length; i++) {
-            let dist1 = this.distance(x, y, balls[i].pos.x, balls[i].pos.y);
-            if(dist1 < radius + balls[i].radius) {
-                // console.log('overlaps...');
-                return true;
-            }
-        }
-        return false;
-    }
+	overlaps(balls, x, y, radius) {
+		for (let i = 0; i < balls.length; i++) {
+			let dist1 = this.distance(x, y, balls[i].pos.x, balls[i].pos.y);
+			if (dist1 < radius + balls[i].radius) {
+				// console.log('overlaps...');
+				return true;
+			}
+		}
+		return false;
+	}
 
-    getClickPosition(event) {
-        const x = event.clientX - cnv.offsetLeft;
-        const y = event.clientY - cnv.offsetTop;
-        return {x: x, y: y};
-    }
+	getClickPosition(event) {
+		const x = event.clientX - cnv.offsetLeft;
+		const y = event.clientY - cnv.offsetTop;
+		return {x: x, y: y};
+	}
 
-    pointInCircle(x, y, cx, cy, radius) {
-        let distanceSquared = (x - cx) * (x - cx) + (y - cy) * (y - cy);
-        return distanceSquared <= radius * radius;
-    }
+	pointInCircle(x, y, cx, cy, radius) {
+		let distanceSquared = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+		return distanceSquared <= radius * radius;
+	}
 
 
-    detectCollisions2(balls){
-        for (let i = 0; i < balls.length; i++) {
-            balls[i].isColliding = false;
-        }
+	detectCollisions2(balls) {
+		for (let i = 0; i < balls.length; i++) {
+			balls[i].isColliding = false;
+		}
 
-        for (let i = 0; i < balls.length; i++) {
-            const ballA = balls[i];
+		for (let i = 0; i < balls.length; i++) {
+			const ballA = balls[i];
 
-            if(this.overlaps(balls, ballA.pos.x, ballA.pos.y, ballA.radius)) {
-                // console.log('overlapping...');
-                // this.resolveColl(ballA, ballB);
-            }
-        }
-    }
+			if (this.overlaps(balls, ballA.pos.x, ballA.pos.y, ballA.radius)) {
+				// console.log('overlapping...');
+				// this.resolveColl(ballA, ballB);
+			}
+		}
+	}
 
 }

@@ -7,10 +7,13 @@
 let setup = (function () {
 	let db = null;
 	let pages = null;
+	let utils = null;
+
 
 	return function setup() {
 		pages = new Pages();
 		db = new DB();
+		utils = new Utils();
 
 		pages.show('login');
 		stopAnimation();
@@ -18,7 +21,7 @@ let setup = (function () {
 		let signInBtn = document.getElementById('sign-in');
 		signInBtn.addEventListener('click', (e) => {
 			db.signIn();
-			let userPage = new UserPage();
+			// let userPage = new UserPage();
 		});
 
 		let registerBtn = document.getElementById('register-user');
@@ -38,6 +41,10 @@ let setup = (function () {
 
 		let adminBtn = document.getElementById('admin-btn');
 		adminBtn.addEventListener('click', (e) => {
+			let usersTblInfo = db.readTableInfo('users');
+			let userPage = new UserPage();
+			userPage.makeUserTable(usersTblInfo);
+
 			pages.show('admin');
 		});
 
@@ -52,6 +59,9 @@ let setup = (function () {
 			if(e.target && e.target.id === 'del-btn') {
 				console.log('del-btn clicked');
 				db.deleteUser(e.target.value);
+				let usersTblInfo = db.readTableInfo('users');
+				let userPage = new UserPage();
+				userPage.makeUserTable(usersTblInfo);
 			}
 		})
 	};

@@ -14,7 +14,7 @@ class DB {
         this.auth = firebase.auth();
         this.db = firebase.database();
         this.UTILS = new Utils();
-
+        rowan = 'rowan';
     }
 
     register() {
@@ -62,25 +62,51 @@ class DB {
             })
     }
 
+    readTable(table) {
+        this.db.ref(table).once('value', (snapshot) => {
 
-    readTableInfo(table) {
-        let ref = this.db.ref('users/');
-        let ret = [];
-        return ref.once('value', (snapshot) => {
-            let userData = {};
-            snapshot.forEach((childSnapShot) => {
-                // let val = childSnapShot.val();
-                // userData = {
-                //     name: val.name,
-                //     email: val.email};
+            snapshot.forEach(function (childSnapShot){
+                let val = childSnapShot.val();
+
+                console.log('val', childSnapShot);
                 // return userData;
             });
         });
-
     }
 
     signIn() {
         let UTILS = new Utils();
+
+        function addUsersToTable(vals, snapshot) {
+            // remove delete button
+
+            let tblId = document.getElementById('users-tbl');
+            // let newRow = tblId.insertRow(-1);
+            // let newCell = newRow.insertCell(0);
+            let newText = document.createTextNode(name);
+            let tRow = document.createElement('tr');
+
+            let tbl = document.getElementById('test-tbl');
+
+            for(let v in vals){
+                let td = document.createElement('td');
+                td.innerText = vals[v];
+                tRow.append(td);
+            }
+
+            let delCol = document.createElement('td');
+            let delBtn = document.createElement('button');
+            let delText = document.createTextNode('Delete');
+            delBtn.append(delText);
+            delBtn.setAttribute('type', 'button');
+            delBtn.setAttribute('value', snapshot.key);
+            delBtn.setAttribute('id', 'del-btn');
+
+            delCol.append(delBtn);
+            tRow.append(delCol);
+            tblId.appendChild(tRow);
+        }
+
 
         function updateUsersTable(childSnapShot) {
             console.log('snapshot', childSnapShot.val());
@@ -106,12 +132,10 @@ class DB {
                     name: val.name,
                     email: val.email,
                     lastLogin: date};
-                // addUsersToTable(userData, childSnapShot);
-                // updateUsersTable(childSnapShot);
+                addUsersToTable(userData, childSnapShot);
+                updateUsersTable(childSnapShot);
                 // return userData;
             });
-        }).catch(err => {
-            console.log(err);
         });
 
         // console.log('userData', userData);
