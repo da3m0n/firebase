@@ -24,13 +24,12 @@ class DB {
         // let passwordConf = document.getElementById('confPassword');
         let UTILS = new Utils();
 
-        // if(validateEmail(email) === false ||
-        //     validatePassword(password) === false ||
-        //     validatePassword(passwordConf === false)) {
+        // if(UTILS.validateEmail(email) === false ||
+        //     UTILS.validatePassword(password) === false) {
         //     alert('Email or password invalid');
         //     return;
         // }
-
+        //
         // if(UTILS.validateField(name) === false) {
         //     alert('Name invalid')
         //     return;

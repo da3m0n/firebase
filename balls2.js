@@ -17,7 +17,9 @@ class Ball2 {
 	}
 
 	update(deltaTime) {
+		console.log('update');
 		if (!deltaTime) return;
+
 
 		let nextX = this.pos.x + this.vel.x * deltaTime;
 
@@ -81,11 +83,11 @@ class Ball2 {
 		ctx.font = "10px Arial";
 		ctx.fillStyle = "black";
 		ctx.textAlign = "center";
-		ctx.fillText(
-			"Vel: " + Math.round(this.vel.x) + ' - ' + Math.round(this.vel.y),
-			this.pos.x,
-			this.pos.y
-		);
+		// ctx.fillText(
+		// 	"Vel: " + Math.round(this.vel.x) + ' - ' + Math.round(this.vel.y),
+		// 	this.pos.x,
+		// 	this.pos.y
+		// );
 		ctx.stroke();
 	}
 

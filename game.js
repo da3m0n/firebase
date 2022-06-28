@@ -11,6 +11,7 @@ let score = 0;
 // }
 class GamePendingState /*extends GameBase*/ {
 	constructor(game) {
+		console.log('GamePendingState');
 		// super(game);
 		this.game = game;
 	}
@@ -37,6 +38,7 @@ class GamePendingState /*extends GameBase*/ {
 
 class GameOverState {
 	constructor(game) {
+		console.log('Game Over State');
 		this.game = game;
 	}
 
@@ -72,6 +74,7 @@ class GameOverState {
 class GamePlayingState /* extends GameBase*/ {
 	constructor(game) {
 		// super();
+		console.log('Game playing state');
 		this.game = game;
 	}
 
@@ -89,7 +92,7 @@ class GamePlayingState /* extends GameBase*/ {
 		// console.log('game2 -> update()');
 		for (let i = 0; i < this.game.balls.length; i++) {
 			const ball = this.game.balls[i];
-			ball.display();
+			// ball.display();
 
 			ball.update(deltaTime);
 		}
@@ -161,8 +164,10 @@ class Game {
 		//     me.gameState.event(e);
 		// });
 
-		this.startGame();
+		// this.startGame();
 	}
+
+	pendingGame(){}
 
 	startGame(){
 		console.log('start game');
