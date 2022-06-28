@@ -82,13 +82,13 @@ class DB {
     signIn() {
         let UTILS = new Utils();
 
-        function updateUsersTable(childSnapShot) {
-            console.log('snapshot', childSnapShot.val());
-        }
+        // function updateUsersTable(childSnapShot) {
+        //     console.log('snapshot', childSnapShot.val());
+        // }
 
         this.db.ref('users').once('value', (snapshot) => {
 
-            snapshot.forEach(function (childSnapShot){
+            snapshot.forEach(function (childSnapShot) {
                 let val = childSnapShot.val();
 
                 // console.log('name', childSnapShot);

@@ -6,6 +6,12 @@ class UserPage {
 
 	}
 
+	removeRow = (oButton) => {
+		let empTab = document.getElementById('users-tbl');
+		empTab.deleteRow((oButton.parentNode.parentNode.rowIndex) - 1);
+		// button -> td -> tr.
+	};
+
 	makeUserTable(tblInfo) {
 		if (tblInfo === null || tblInfo === undefined) {
 			return this.userCont;
@@ -16,55 +22,58 @@ class UserPage {
 				parent.removeChild(parent.firstChild);
 			}
 		}
+
 		let tblId = document.getElementById('users-tbl');
+
 		removeAllChildNodes(tblId);
 		let usersArr = [];
 
 		tblInfo.then((childSnapShot) => {
-			for (let v in childSnapShot.val()) {
-				let userData = {};
-				let user = {};
+				for (const child in childSnapShot.val()) {
+					let userData = {};
+					let user = {};
 
-				let users = childSnapShot.val()[v];
+					let users = childSnapShot.val()[child];
 
-				delete users.password;
-				// doing this to set order. Better way???
-				user.name = users.name;
-				user.email = users.email;
-				user.lastLogin = users.lastLogin;
+					delete users.password;
+					// doing this to set order. Better way???
+					user.name = users.name;
+					user.email = users.email;
+					user.lastLogin = users.lastLogin;
 
-				userData[v] = user;
-				usersArr.push(userData);
-			}
-
-			let rowCnt = 0;
-			usersArr.forEach((user) => {
-				console.log('user', user);
-				let tRow = document.createElement('tr');
-
-				for (const [key, value] of Object.entries(user)) {
-					for(let u in value) {
-						let td = document.createElement('td');
-						td.innerText = value[u];
-						tRow.append(td);
-					}
-					let delCol = document.createElement('td');
-					let delBtn = document.createElement('button');
-					let delText = document.createTextNode('Delete');
-					delBtn.append(delText);
-					delBtn.setAttribute('type', 'button');
-					delBtn.setAttribute('value', key);
-					delBtn.setAttribute('id', 'del-btn');
-					delCol.append(delBtn);
-					tRow.append(delCol);
+					userData[child] = user;
+					usersArr.push(userData);
 				}
-				// tblId.insertRow(tRow);
-				tblId.append(tRow);
-			});
 
-		}, (rej) => {
-			console.log('reject', rej);
-		});
+				// console.log('usersArr', usersArr);
+				usersArr.forEach((user) => {
+					let row = tblId.insertRow();
+					for (const [key, value] of Object.entries(user)) {
+						let cnt = 0;
+						for (let u in value) {
+							// console.log('val', cnt, value[u]);
+							let td = document.createElement('td');
+							td = row.insertCell(cnt);
+							td.appendChild(document.createTextNode(value[u]));
+							row.append(td);
+							cnt++;
+						}
+
+						let delCol = document.createElement('td');
+						let delBtn = document.createElement('button');
+						let delText = document.createTextNode('Delete');
+						delBtn.append(delText);
+						delBtn.setAttribute('type', 'button');
+						delBtn.setAttribute('value', key);
+						delBtn.setAttribute('id', 'del-btn');
+						delCol.append(delBtn);
+						row.append(delCol);
+					}
+				});
+			},
+			(reject) => {
+				console.log('reject', reject);
+			});
 
 		return this.userCont;
 	}

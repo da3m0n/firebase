@@ -54,16 +54,15 @@ let setup = (function () {
 			db.startGame();
 		});
 
-
 		document.addEventListener('click', (e) => {
-			if(e.target && e.target.id === 'del-btn') {
-				console.log('del-btn clicked');
+			if (e.target && e.target.id === 'del-btn') {
+				console.log('del-btn clicked', this);
 				db.deleteUser(e.target.value);
-				let usersTblInfo = db.readTableInfo('users');
 				let userPage = new UserPage();
-				userPage.makeUserTable(usersTblInfo);
+				userPage.removeRow(e.target);
 			}
-		})
+		});
 	};
+
 })();
 
