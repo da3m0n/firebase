@@ -1,5 +1,5 @@
-const UTILS = new Utils();
-let score = 0;
+// const UTILS = new Utils();
+// let score = 0;
 
 // how to do base class?
 // class GameBase {
@@ -30,6 +30,9 @@ class GamePendingState /*extends GameBase*/ {
 	}
 
 	update(deltaTime) {
+		console.log('Update state from GamePendingState');
+		ctx.fillStyle = 'black';
+		ctx.fillRect(0, 0, cnv.width, cnv.height);
 	}
 
 	event(e) {}
@@ -76,6 +79,9 @@ class GamePlayingState /* extends GameBase*/ {
 		// super();
 		console.log('Game playing state');
 		this.game = game;
+		this.utils = new Utils();
+		// let gameEl = document.getElementById('game');
+		// gameEl.style.display = 'inline-flex';
 	}
 
 	draw(ctx) {
@@ -96,7 +102,7 @@ class GamePlayingState /* extends GameBase*/ {
 
 			ball.update(deltaTime);
 		}
-		UTILS.detectCollisions2(this.game.balls);
+		this.utils.detectCollisions2(this.game.balls);
 		// UTILS.detectCollisions(this.game.balls);
 	}
 
@@ -109,36 +115,31 @@ class Game {
 		this.width = width;
 		this.height = height;
 		this.ctx = ctx;
-
+		this.score = 0;
 		let me = this;
 		this.gameState = new GamePendingState(this);
-		// let v1 = new Vector(2,1);
-		// let v2 = new Vector(-1,1);
-		// console.log(v1, v2);
-		// console.log('Add:', v1.add(v2));
-		// console.log('Subt:', v2.subtr(v1));
-		// console.log('Mag:', v1.mag());
-		// console.log('Mult:', v1.mult(2));
-		// console.log('Unit:', v1.unit());
-		// console.log('Dot:', Vector.dot(v1, v2));
-
+		this.utils = new Utils();
 		// UTILS.keyControl(new Ball2(100, 150, 25, 'green'));
 
 		cnv.addEventListener('mousedown', ballClickHandler);
 		// cnv.addEventListener('keydown', keyboardHandler);
 
+		let scoreEl = document.getElementById('pScore');
+
 		function ballClickHandler(event) {
-			let clickPos = UTILS.getClickPosition(event);
+			let clickPos = me.utils.getClickPosition(event);
 			// console.log('click pos', clickPos);
 			// for (let i = 0; i < me.balls.length; i++) {
-			for(let i = me.balls.length - 1; i >= 0; i--) {
+			for (let i = me.balls.length - 1; i >= 0; i--) {
 				let ball = me.balls[i];
-				if (UTILS.pointInCircle(ball.pos.x, ball.pos.y, clickPos.x, clickPos.y, ball.radius)) {
-					score += ball.getBallScore();
+				if (me.utils.pointInCircle(ball.pos.x, ball.pos.y, clickPos.x, clickPos.y, ball.radius)) {
+					me.score += ball.getBallScore();
 					me.balls.splice(i, 1);
 					break;
 				}
 			}
+			scoreEl.innerHTML = 'Ball Score: ' + me.score;
+
 			// console.log('balls length', me.balls.length);
 			if (me.balls.length === 0) {
 				// console.log('game over');
@@ -167,8 +168,6 @@ class Game {
 		// this.startGame();
 	}
 
-	pendingGame(){}
-
 	startGame(){
 		console.log('start game');
 		let me = this;
@@ -186,37 +185,39 @@ class Game {
 				// console.log('ArrowRight');
 				ball1.moveX(true);
 			}
-			if(e.code === 'ArrowUp') {
+			if (e.code === 'ArrowUp') {
 				// console.log('ArrowUp');
 				ball1.moveY(false);
 			}
-			if(e.code === 'ArrowDown') {
+			if (e.code === 'ArrowDown') {
 				// console.log('ArrowDown');
 				ball1.moveY(true);
 			}
 
 		})
-		for (let i = 0; i < 5; i++) {
-			let ballRadius = 5 + UTILS.random(5, 15);
-			
-			let x = UTILS.random(ballRadius, this.width - ballRadius);
-			let y = UTILS.random(ballRadius, this.height - ballRadius);
-			
-			console.log('width', this.width, 'height', this.height, 'x', x, 'y', y);
-			
-			while (UTILS.overlaps(this.balls, x, y, ballRadius)) {
-				x = UTILS.random(ballRadius, this.width - ballRadius);
-				y = UTILS.random(ballRadius, this.height - ballRadius);
+		for (let i = 0; i < 1; i++) {
+			let ballRadius = 5 + this.utils.random(5, 15);
+
+			let x = this.utils.random(ballRadius, this.width - ballRadius);
+			let y = this.utils.random(ballRadius, this.height - ballRadius);
+
+			while (this.utils.overlaps(this.balls, x, y, ballRadius)) {
+				x = this.utils.random(ballRadius, this.width - ballRadius);
+				y = this.utils.random(ballRadius, this.height - ballRadius);
 				breakout++;
-				if(breakout === 3500) {
+				if (breakout === 3500) {
 					break;
 				}
 
 			}
-
-			
-			this.balls.push(new Ball2(x, y, ballRadius, UTILS.getRandomColor()));
+			this.balls.push(new Ball2(x, y, ballRadius, this.utils.getRandomColor()));
 		}
+	}
+
+	stopGame() {
+		console.log('Stopping game');
+		this.balls = [];
+		this.gameState = new GamePendingState(this);
 	}
 
 	update(deltaTime) {
@@ -227,12 +228,12 @@ class Game {
 		ctx.fillStyle = 'yellow';
 		ctx.font = '12px Arial';
 		ctx.fillText(
-			"Score:",
+			'Score:',
 			20,
 			20
 		);
 		ctx.fillText(
-			score,
+			this.score,
 			50,
 			20
 		);

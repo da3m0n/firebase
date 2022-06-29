@@ -1,7 +1,7 @@
 class UserPage {
 
 	constructor() {
-		this.userCont = document.getElementById('users-cont');
+		this.userCont = document.getElementById('usersCont');
 		// this.usersTable();
 
 	}
@@ -85,8 +85,8 @@ class Pages {
 		this.pages = {
 			login: {divs: [document.getElementById('login-cont')]},
 			users: {divs: [userPage.makeUserTable()]},
-			admin: {divs: [document.getElementById('admin-cont')]},
-			game: {divs: [document.getElementById('game-cont')]}
+			admin: {divs: [document.getElementById('adminCont')]},
+			game: {divs: [document.getElementById('gameCont')]}
 		};
 	}
 

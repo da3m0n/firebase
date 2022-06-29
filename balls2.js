@@ -4,14 +4,11 @@ class Ball2 {
 		this.radius = radius;
 		this.pos = new Vector(posX, posY);
 		// this.vel = new Vector(0.25 / 5, 0.20 / 5); 
-		this.acc = new Vector(0,0);
+		this.acc = new Vector(0, 0);
 		// let cnv = document.getElementById('canvas');
 		this.cnvWidth = cnv.width;
 		this.cnvHeight = cnv.height;
-		
-		console.log(UTILS.random(0.25 / 5, 0.75), UTILS.random(0.25 / 5, 0.75));
-		
-		this.vel = new Vector(Math.random() / 5 *1000 , Math.random() / 5* 1000);
+		this.vel = new Vector(Math.random() / 5, Math.random() / 5);
 		this.col = col;
 		this.mass = 1;
 		this.player = false;

@@ -15,15 +15,14 @@ let setup = (function () {
 
 
 	let dimsEl = document.getElementById('game');
-	console.log('dims', dimsEl.getBoundingClientRect());
-	let dims = dimsEl.getBoundingClientRect()
+	// console.log('dims', dimsEl.getBoundingClientRect());
+	let dims = dimsEl.getBoundingClientRect();
 
 	const GAME_WIDTH = dims.width;
 	const GAME_HEIGHT = dims.height;
 
 	cnv.width = GAME_WIDTH;
 	cnv.height = GAME_HEIGHT;
-
 
 	let game = new Game(GAME_WIDTH, GAME_HEIGHT, ctx);
 	let lastTime = null;
@@ -68,7 +67,8 @@ let setup = (function () {
 		db = new DB();
 		utils = new Utils();
 
-		pages.show('login');
+		pages.show('game');
+		// pages.show('login');
 		stopAnimation();
 
 		let signInBtn = document.getElementById('sign-in');
@@ -82,7 +82,7 @@ let setup = (function () {
 			db.register();
 		});
 
-		let backBtn = document.getElementById('back-btn');
+		let backBtn = document.getElementById('backBtn');
 		backBtn.addEventListener('click', (e) => {
 			pages.show('game');
 		});
@@ -92,7 +92,7 @@ let setup = (function () {
 			db.signInGoogle();
 		});
 
-		let adminBtn = document.getElementById('admin-btn');
+		let adminBtn = document.getElementById('adminBtn');
 		adminBtn.addEventListener('click', (e) => {
 			let usersTblInfo = db.readTableInfo('users');
 			let userPage = new UserPage();
@@ -101,13 +101,20 @@ let setup = (function () {
 			pages.show('admin');
 		});
 
-		let startGameBtn = document.getElementById('start-game-btn');
+		let startGameBtn = document.getElementById('startGameBtn');
 		startGameBtn.addEventListener('click', (e) => {
 			startAnimation();
 			// db.startGame();
 			pages.show('game');
 			game.startGame();
 		});
+
+		let stopGameBtn = document.getElementById('stopGameBtn');
+		stopGameBtn.addEventListener('click', (e) => {
+			stopAnimation();
+			game.stopGame();
+		});
+
 
 		document.addEventListener('click', (e) => {
 			if (e.target && e.target.id === 'del-btn') {
