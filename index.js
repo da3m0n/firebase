@@ -26,13 +26,14 @@ let setup = (function () {
 
 
 	let game = new Game(GAME_WIDTH, GAME_HEIGHT, ctx);
-	let lastTime = 0;
+	let lastTime = null;
 
 	const startBtn = document.getElementById('startBtn');
 	const stopBtn = document.getElementById('stopBtn');
 	let myReq;
 
 	const startAnimation = () => {
+		lastTime = null;
 		myReq = requestAnimationFrame(gameLoop);
 	}
 
@@ -44,6 +45,11 @@ let setup = (function () {
 	function gameLoop(timestamp) {
 
 		let deltaTime = timestamp - lastTime;
+		if(lastTime === null) {
+			lastTime = timestamp;
+			myReq = requestAnimationFrame(gameLoop);
+			return;
+		};
 		lastTime = timestamp;
 
 		ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);

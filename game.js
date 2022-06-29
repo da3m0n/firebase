@@ -176,8 +176,8 @@ class Game {
 		this.balls= [];
 		let breakout = 0;
 
-		let ball1 = new Ball2(130, 100, 25, 'red');
-		this.balls.push(ball1);
+		// let ball1 = new Ball2(130, 100, 25, 'red');
+		// this.balls.push(ball1);
 		document.addEventListener('keydown', (e) => {
 			if(e.code === 'ArrowLeft') {
 				ball1.moveX(false);
@@ -196,11 +196,14 @@ class Game {
 			}
 
 		})
-		for (let i = 0; i < 20; i++) {
+		for (let i = 0; i < 5; i++) {
 			let ballRadius = 5 + UTILS.random(5, 15);
+			
 			let x = UTILS.random(ballRadius, this.width - ballRadius);
 			let y = UTILS.random(ballRadius, this.height - ballRadius);
-
+			
+			console.log('width', this.width, 'height', this.height, 'x', x, 'y', y);
+			
 			while (UTILS.overlaps(this.balls, x, y, ballRadius)) {
 				x = UTILS.random(ballRadius, this.width - ballRadius);
 				y = UTILS.random(ballRadius, this.height - ballRadius);
@@ -208,8 +211,10 @@ class Game {
 				if(breakout === 3500) {
 					break;
 				}
+
 			}
 
+			
 			this.balls.push(new Ball2(x, y, ballRadius, UTILS.getRandomColor()));
 		}
 	}

@@ -157,7 +157,7 @@ class Utils {
 	}
 
 	random(min, max) {
-		return Math.round(Math.random() * (max - min) + min);
+		return Math.random() * (max - min) + min;
 	}
 
 	distance(x1, y1, x2, y2) {
