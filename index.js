@@ -12,19 +12,10 @@ let setup = (function () {
 	let db = null;
 	let pages = null;
 	let utils = null;
+	
 
 
-	let dimsEl = document.getElementById('game');
-	// console.log('dims', dimsEl.getBoundingClientRect());
-	let dims = dimsEl.getBoundingClientRect();
-
-	const GAME_WIDTH = dims.width;
-	const GAME_HEIGHT = dims.height;
-
-	cnv.width = GAME_WIDTH;
-	cnv.height = GAME_HEIGHT;
-
-	let game = new Game(GAME_WIDTH, GAME_HEIGHT, ctx);
+	let game = new Game(cnv);
 	let lastTime = null;
 
 	const startBtn = document.getElementById('startBtn');
@@ -51,9 +42,7 @@ let setup = (function () {
 		};
 		lastTime = timestamp;
 
-		ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-		ctx.fillStyle = 'black';
-		ctx.fillRect(0, 0, cnv.width, cnv.height);
+
 
 		game.update(deltaTime);
 		game.draw(ctx);
@@ -67,7 +56,7 @@ let setup = (function () {
 		db = new DB();
 		utils = new Utils();
 
-		pages.show('game');
+		// pages.show('game');
 		// pages.show('login');
 		stopAnimation();
 
@@ -102,17 +91,27 @@ let setup = (function () {
 		});
 
 		let startGameBtn = document.getElementById('startGameBtn');
+		game.addStateListener((started) => {
+            startGameBtn.innerText = started ? 'Stop Game':'Start Game';
+				
+			}
+		);
+		
 		startGameBtn.addEventListener('click', (e) => {
-			startAnimation();
+			if (game.started()) {
+				stopAnimation();
+				game.stopGame();
+	
+			} else {
+						startAnimation();
 			// db.startGame();
-			pages.show('game');
-			game.startGame();
+			    pages.show('game');
+			    game.startGame();
+			}
 		});
 
 		let stopGameBtn = document.getElementById('stopGameBtn');
 		stopGameBtn.addEventListener('click', (e) => {
-			stopAnimation();
-			game.stopGame();
 		});
 
 

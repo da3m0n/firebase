@@ -111,15 +111,15 @@ class GamePlayingState /* extends GameBase*/ {
 
 
 class Game {
-	constructor(width, height, ctx) {
-		this.width = width;
-		this.height = height;
-		this.ctx = ctx;
+	constructor(cnv) {
+		this.cnv = cnv;
+		this.ctx = cnv.getContext('2d');
 		this.score = 0;
 		let me = this;
 		this.gameState = new GamePendingState(this);
 		this.utils = new Utils();
-		// UTILS.keyControl(new Ball2(100, 150, 25, 'green'));
+		this.listeners = [];
+		
 
 		cnv.addEventListener('mousedown', ballClickHandler);
 		// cnv.addEventListener('keydown', keyboardHandler);
@@ -143,8 +143,8 @@ class Game {
 			// console.log('balls length', me.balls.length);
 			if (me.balls.length === 0) {
 				// console.log('game over');
-				me.gameState = new GameOverState(me);
-			}
+				me.setGameState(new GameOverState(me));
+							}
 		}
 
 		// document.addEventListener('keydown', (e) => {
@@ -168,33 +168,59 @@ class Game {
 		// this.startGame();
 	}
 
+	addStateListener(listener) {
+		this.listeners.push(listener)
+	}
+
+	started() {
+		return this.gameState instanceof GamePlayingState;
+	}
+	setGameState(gameState) {
+		this.gameState = gameState;
+	for (let i =0; i < this.listeners.length; i++) {
+		this.listeners[i](this.started());
+	}
+	}
 	startGame(){
 		console.log('start game');
 		let me = this;
-		this.gameState = new GamePlayingState(this);
+		this.setGameState(new GamePlayingState(this));
 		this.balls= [];
 		let breakout = 0;
 
+		let dimsEl = document.getElementById('game');
+	// console.log('dims', dimsEl.getBoundingClientRect());
+	let dims = dimsEl.getBoundingClientRect();
+		this.width = dims.width;
+		this.height = dims.height;
+		// UTILS.keyControl(new Ball2(100, 150, 25, 'green'));
+
+		this.cnv.width = dims.width
+		this.cnv.height = dims.height;
+	
+		this.ctx.width = dims.width
+		this.ctx.height = dims.height;
+
 		// let ball1 = new Ball2(130, 100, 25, 'red');
 		// this.balls.push(ball1);
-		document.addEventListener('keydown', (e) => {
-			if(e.code === 'ArrowLeft') {
-				ball1.moveX(false);
-			}
-			if(e.code === 'ArrowRight') {
-				// console.log('ArrowRight');
-				ball1.moveX(true);
-			}
-			if (e.code === 'ArrowUp') {
-				// console.log('ArrowUp');
-				ball1.moveY(false);
-			}
-			if (e.code === 'ArrowDown') {
-				// console.log('ArrowDown');
-				ball1.moveY(true);
-			}
+		// document.addEventListener('keydown', (e) => {
+		// 	if(e.code === 'ArrowLeft') {
+		// 		ball1.moveX(false);
+		// 	}
+		// 	if(e.code === 'ArrowRight') {
+		// 		// console.log('ArrowRight');
+		// 		ball1.moveX(true);
+		// 	}
+		// 	if (e.code === 'ArrowUp') {
+		// 		// console.log('ArrowUp');
+		// 		ball1.moveY(false);
+		// 	}
+		// 	if (e.code === 'ArrowDown') {
+		// 		// console.log('ArrowDown');
+		// 		ball1.moveY(true);
+		// 	}
 
-		})
+		// })
 		for (let i = 0; i < 1; i++) {
 			let ballRadius = 5 + this.utils.random(5, 15);
 
@@ -217,7 +243,7 @@ class Game {
 	stopGame() {
 		console.log('Stopping game');
 		this.balls = [];
-		this.gameState = new GamePendingState(this);
+		this.setGameState(new GamePendingState(this));
 	}
 
 	update(deltaTime) {
@@ -246,6 +272,10 @@ class Game {
 	}
 
 	draw(ctx) {
+		
+		ctx.clearRect(0, 0, this.width, this.height);
+		ctx.fillStyle = 'black';
+		ctx.fillRect(0, 0, this.width, this.height);
 		this.gameState.draw(ctx);
 	}
 
