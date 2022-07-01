@@ -58,6 +58,9 @@ body {
     width: 100%;
 }
 
+#usersCont {
+    display: none;
+}
 .btn-cont {
     display: flex;
     align-items: center;

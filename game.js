@@ -82,6 +82,7 @@ class GamePlayingState /* extends GameBase*/ {
 		this.utils = new Utils();
 		// let gameEl = document.getElementById('game');
 		// gameEl.style.display = 'inline-flex';
+		
 	}
 
 	draw(ctx) {
@@ -94,14 +95,45 @@ class GamePlayingState /* extends GameBase*/ {
 		this.game.drawText(ctx)
 	}
 
-	update(deltaTime) {
-		// console.log('game2 -> update()');
+	doUpdate(deltaTime) {
 		for (let i = 0; i < this.game.balls.length; i++) {
 			const ball = this.game.balls[i];
 			// ball.display();
-
+			
 			ball.update(deltaTime);
 		}
+	}
+
+	getCollisions(objs, deltaTime) {
+		// console.log(objs, deltaTime);
+		let collisions = [];
+		for(let i = 0; i < objs.length;i++) {
+			let o = objs[i];
+			for (let j = i + 1; j < objs.length; j++) {
+				let collision = o.collides(objs[j], deltaTime);
+				if(collision) {
+					collisions.push(collision);
+				}
+			}
+
+		}
+		return collisions;
+	}
+
+	update(deltaTime) {
+		// console.log('game2 -> update()');
+		let game = this.game;
+
+		let collisions = this.getCollisions(game.walls.concat(game.balls), deltaTime);
+		while (collisions.length > 0) {
+			let firstCollision = collisions.unshift()
+			doUpdate(firstCollision.time);
+			deltaTime -= firstCollision.time;
+			collisions = this.getCollisions(game.walls.concat(game.balls), deltaTime);
+
+		}
+       doUpdate(deltaTime);
+
 		this.utils.detectCollisions2(this.game.balls);
 		// UTILS.detectCollisions(this.game.balls);
 	}
@@ -119,7 +151,7 @@ class Game {
 		this.gameState = new GamePendingState(this);
 		this.utils = new Utils();
 		this.listeners = [];
-		
+		this.numBalls = 1;
 
 		cnv.addEventListener('mousedown', ballClickHandler);
 		// cnv.addEventListener('keydown', keyboardHandler);
@@ -201,6 +233,8 @@ class Game {
 		this.ctx.width = dims.width
 		this.ctx.height = dims.height;
 
+		this.walls =[new Wall(0, null, 1), new Wall(dims.width, null, -1), new Wall(null, 0, 1), new Wall(null, dims.height, -1)];
+
 		// let ball1 = new Ball2(130, 100, 25, 'red');
 		// this.balls.push(ball1);
 		// document.addEventListener('keydown', (e) => {
@@ -221,7 +255,7 @@ class Game {
 		// 	}
 
 		// })
-		for (let i = 0; i < 1; i++) {
+		for (let i = 0; i < this.numBalls; i++) {
 			let ballRadius = 5 + this.utils.random(5, 15);
 
 			let x = this.utils.random(ballRadius, this.width - ballRadius);

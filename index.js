@@ -12,8 +12,6 @@ let setup = (function () {
 	let db = null;
 	let pages = null;
 	let utils = null;
-	
-
 
 	let game = new Game(cnv);
 	let lastTime = null;
@@ -56,7 +54,7 @@ let setup = (function () {
 		db = new DB();
 		utils = new Utils();
 
-		// pages.show('game');
+		pages.show('game');
 		// pages.show('login');
 		stopAnimation();
 

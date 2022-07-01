@@ -53,6 +53,19 @@ class Ball2 {
 		}
 	}
 
+	collides(obj, deltaTime) {
+		
+		if(obj instanceof Wall) {
+x = t * this.vel.x + this.posX;
+y = t * this.vel.y + this.posY;
+
+// what does t need to be when it hits the wall
+
+0 = 
+
+		}
+	}
+
 	moveX(dir){
 		if(dir) {
 			console.log('right');
