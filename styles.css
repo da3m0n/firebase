@@ -109,7 +109,7 @@ button {
 }
 
 #game {
-    /* display: none; added so doesn't load initially */
+    /*display: none; !* added so doesn't load initially *!*/
     display: inline-flex;
 
     /*flex-grow: 4;*/
