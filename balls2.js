@@ -8,7 +8,8 @@ class Ball2 {
 		// let cnv = document.getElementById('canvas');
 		this.cnvWidth = cnv.width;
 		this.cnvHeight = cnv.height;
-		this.vel = new Vector(Math.random() / 5, Math.random() / 5);
+		// this.vel = new Vector(Math.random() / 5, Math.random() / 5);
+		this.vel = new Vector(0.25, 0.25);
 		this.col = col;
 		this.mass = 1;
 		this.player = false;
@@ -24,45 +25,60 @@ class Ball2 {
 	
 		let nextX = this.pos.x + this.vel.x * deltaTime;
 
-		if (nextX > (this.cnvWidth - this.radius)) {
-			let xDist = nextX - this.pos.x;
-			let borderDist = (this.cnvWidth - this.radius) - this.pos.x;
+		// this.pos.x += this.vel.x * deltaTime;
+		this.pos.y += this.vel.y * deltaTime;
 
-			this.pos.x = this.cnvWidth - this.radius;
-			this.vel.x = -Math.abs(this.vel.x)
-			this.pos.x += this.vel.x * deltaTime * (1 - borderDist / xDist);
+		// if (nextX > (this.cnvWidth - this.radius)) {
+		// 	let xDist = nextX - this.pos.x;
+		// 	let borderDist = (this.cnvWidth - this.radius) - this.pos.x;
 
-		} else if (nextX < this.radius) {
-			let xDist = Math.abs(nextX - this.pos.x);
-			let borderDist = this.pos.x - this.radius;
+		// 	this.pos.x = this.cnvWidth - this.radius;
+		// 	this.vel.x = -Math.abs(this.vel.x)
+		// 	this.pos.x += this.vel.x * deltaTime * (1 - borderDist / xDist);
 
-			this.vel.x = Math.abs(this.vel.x);
-			this.pos.x = this.radius + this.vel.x * deltaTime * (1 - borderDist / xDist);
-		} else {
-			this.pos.x += this.vel.x * deltaTime;
-		}
+		// } else if (nextX < this.radius) {
+		// 	let xDist = Math.abs(nextX - this.pos.x);
+		// 	let borderDist = this.pos.x - this.radius;
 
-		if (this.pos.y > (this.cnvHeight - this.radius)) {
-			this.vel.y = -Math.abs(this.vel.y);
-			this.pos.y += this.vel.y * deltaTime;
-		} else if (this.pos.y < this.radius) {
-			this.vel.y = Math.abs(this.vel.y);
-			this.pos.y += this.vel.y * deltaTime;
-		} else {
-			this.pos.y += this.vel.y * deltaTime;
-		}
+		// 	this.vel.x = Math.abs(this.vel.x);
+		// 	this.pos.x = this.radius + this.vel.x * deltaTime * (1 - borderDist / xDist);
+		// } else {
+		// 	this.pos.x += this.vel.x * deltaTime;
+		// }
+
+		// if (this.pos.y > (this.cnvHeight - this.radius)) {
+		// 	this.vel.y = -Math.abs(this.vel.y);
+		// 	this.pos.y += this.vel.y * deltaTime;
+		// } else if (this.pos.y < this.radius) {
+		// 	this.vel.y = Math.abs(this.vel.y);
+		// 	this.pos.y += this.vel.y * deltaTime;
+		// } else {
+		// 	this.pos.y += this.vel.y * deltaTime;
+		// }
 	}
 
 	collides(obj, deltaTime) {
-		
+			
 		if(obj instanceof Wall) {
-x = t * this.vel.x + this.posX;
-y = t * this.vel.y + this.posY;
+			if(obj.x !== null) {
+				// obj.x = t * this.vel.x + this.pos.x + this.radius;
+				// obj.x + obj.dir * this.radius = t * this.vel.x + this.pos.x
+				// obj.x + obj.dir * this.radius - this.pos.x = t * this.vel.x
+				// (obj.x + obj.dir * this.radius  - this.pos.x )/this.vel.x = t
 
-// what does t need to be when it hits the wall
-
-0 = 
-
+				let t = (obj.x + obj.dir * this.radius - this.pos.x)/this.vel.x;
+				if(t >= 0 && t <= deltaTime && isFinite(t)) {	
+					console.log('collision width a vertical wall');
+					return t;
+				}				
+			}			
+			if(obj.y !== null) {
+				let t = (obj.y + obj.dir * this.radius - this.pos.y) / this.vel.y;
+				if(t >= 0 && t <= deltaTime && isFinite(t)) {
+					console.log('collission with a horizontal wall');
+					return t;
+				}
+			}
 		}
 	}
 

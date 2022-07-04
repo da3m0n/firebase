@@ -2,17 +2,6 @@ class Vector {
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
-
-		// let v1 = new Vector(2,1);
-		// let v2 = new Vector(-1,1);
-		// console.log(v1, v2);
-		// console.log('Add:', v1.add(v2));
-		// console.log('Subt:', v2.subtr(v1));
-		// console.log('Mag:', v1.mag());
-		// console.log('Mult:', v1.mult(2));
-		// console.log('Unit:', v1.unit());
-		// console.log('Dot:', Vector.dot(v1, v2));
-
 	}
 
 	add(v) {
@@ -49,5 +38,19 @@ class Vector {
 		ctx.strokeStyle = col;
 		ctx.stroke();
 		ctx.closePath();
+	}
+
+	vectorTest() {
+		
+		let v1 = new Vector(2,1);
+		let v2 = new Vector(-1,1);
+		console.log(v1, v2);
+		console.log('Add:', v1.add(v2));
+		console.log('Subt:', v2.subtr(v1));
+		console.log('Mag:', v1.mag());
+		console.log('Mult:', v1.mult(2));
+		console.log('Unit:', v1.unit());
+		console.log('Dot:', Vector.dot(v1, v2));
+
 	}
 }

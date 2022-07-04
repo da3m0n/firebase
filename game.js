@@ -98,8 +98,7 @@ class GamePlayingState /* extends GameBase*/ {
 	doUpdate(deltaTime) {
 		for (let i = 0; i < this.game.balls.length; i++) {
 			const ball = this.game.balls[i];
-			// ball.display();
-			
+
 			ball.update(deltaTime);
 		}
 	}
@@ -110,14 +109,45 @@ class GamePlayingState /* extends GameBase*/ {
 		for(let i = 0; i < objs.length;i++) {
 			let o = objs[i];
 			for (let j = i + 1; j < objs.length; j++) {
-				let collision = o.collides(objs[j], deltaTime);
-				if(collision) {
-					collisions.push(collision);
+				let when = o.collides(objs[j], deltaTime);
+				
+				if(when != null) {		
+					// console.log('collission...');
+					collisions.push({time: when, obj1: o, obj2: objs[j]});
 				}
 			}
-
 		}
+		
+		collisions.sort(function(x, y){
+			return x.time - y.time;
+		});
 		return collisions;
+	}
+
+	handleCollide(collisions) {
+		// for each colis <= first coliss time handle collide and each obj handle the collide
+		// collision = obj1: Wall {x: 0, y: null, dir: 1}
+		// obj2: Ball {radius: xxx, pos: vector, acc: vector, cnvWidth: xxx, cnvHeight: xxx, vel: vector} 
+		// time: xxx
+
+		// let nextX = this.pos.x + this.vel.x * deltaTime;
+
+		// this.pos.x += this.vel.x * deltaTime;
+		
+		// if (nextX > (this.cnvWidth - this.radius)) {
+		// 	let xDist = nextX - this.pos.x;
+		// 	let borderDist = (this.cnvWidth - this.radius) - this.pos.x;
+
+		// 	this.pos.x = this.cnvWidth - this.radius;
+		// 	this.vel.x = -Math.abs(this.vel.x)
+		// 	this.pos.x += this.vel.x * deltaTime * (1 - borderDist / xDist);
+		
+		collisions.forEach((coll) => { 
+			
+			// coll.obj2.pos.y = 400;
+			// coll.obj2.vel.y = 0.25;
+			// console.log('collission');
+		});
 	}
 
 	update(deltaTime) {
@@ -127,12 +157,12 @@ class GamePlayingState /* extends GameBase*/ {
 		let collisions = this.getCollisions(game.walls.concat(game.balls), deltaTime);
 		while (collisions.length > 0) {
 			let firstCollision = collisions.unshift()
-			doUpdate(firstCollision.time);
+			this.doUpdate(firstCollision.time);
+			this.handleCollide(collisions);
 			deltaTime -= firstCollision.time;
 			collisions = this.getCollisions(game.walls.concat(game.balls), deltaTime);
-
 		}
-       doUpdate(deltaTime);
+        this.doUpdate(deltaTime);
 
 		this.utils.detectCollisions2(this.game.balls);
 		// UTILS.detectCollisions(this.game.balls);
