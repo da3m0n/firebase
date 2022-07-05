@@ -91,7 +91,6 @@ let setup = (function () {
 		let startGameBtn = document.getElementById('startGameBtn');
 		game.addStateListener((started) => {
             startGameBtn.innerText = started ? 'Stop Game':'Start Game';
-				
 			}
 		);
 		
@@ -107,11 +106,6 @@ let setup = (function () {
 			    game.startGame();
 			}
 		});
-
-		let stopGameBtn = document.getElementById('stopGameBtn');
-		stopGameBtn.addEventListener('click', (e) => {
-		});
-
 
 		document.addEventListener('click', (e) => {
 			if (e.target && e.target.id === 'del-btn') {

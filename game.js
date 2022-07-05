@@ -82,7 +82,7 @@ class GamePlayingState /* extends GameBase*/ {
 		this.utils = new Utils();
 		// let gameEl = document.getElementById('game');
 		// gameEl.style.display = 'inline-flex';
-		
+
 	}
 
 	draw(ctx) {
@@ -110,14 +110,14 @@ class GamePlayingState /* extends GameBase*/ {
 			let o = objs[i];
 			for (let j = i + 1; j < objs.length; j++) {
 				let when = o.collides(objs[j], deltaTime);
-				
-				if(when != null) {		
+
+				if (when != null) {
 					// console.log('collission...');
 					collisions.push({time: when, obj1: o, obj2: objs[j]});
 				}
 			}
 		}
-		
+
 		collisions.sort(function(x, y){
 			return x.time - y.time;
 		});
@@ -125,27 +125,24 @@ class GamePlayingState /* extends GameBase*/ {
 	}
 
 	handleCollide(collisions) {
-		// for each colis <= first coliss time handle collide and each obj handle the collide
-		// collision = obj1: Wall {x: 0, y: null, dir: 1}
-		// obj2: Ball {radius: xxx, pos: vector, acc: vector, cnvWidth: xxx, cnvHeight: xxx, vel: vector} 
-		// time: xxx
 
-		// let nextX = this.pos.x + this.vel.x * deltaTime;
+		collisions.forEach((coll) => {
+			if (coll.obj1.y !== null) {
+				if (coll.obj1.dir === -1) {
+					coll.obj2.vel.y = -Math.abs(coll.obj2.vel.y);
+				} else {
+					coll.obj2.vel.y = Math.abs(coll.obj2.vel.y);
+				}
+				coll.obj2.pos.y += coll.obj2.vel.y * coll.time;
+			} else if (coll.obj1.x !== null) {
+				if (coll.obj1.dir === -1) {
+					coll.obj2.vel.x = -Math.abs(coll.obj2.vel.x);
+				} else {
+					coll.obj2.vel.x = Math.abs(coll.obj2.vel.x);
+				}
+				coll.obj2.pos.x += coll.obj2.vel.x * coll.time;
+			}
 
-		// this.pos.x += this.vel.x * deltaTime;
-		
-		// if (nextX > (this.cnvWidth - this.radius)) {
-		// 	let xDist = nextX - this.pos.x;
-		// 	let borderDist = (this.cnvWidth - this.radius) - this.pos.x;
-
-		// 	this.pos.x = this.cnvWidth - this.radius;
-		// 	this.vel.x = -Math.abs(this.vel.x)
-		// 	this.pos.x += this.vel.x * deltaTime * (1 - borderDist / xDist);
-		
-		collisions.forEach((coll) => { 
-			
-			// coll.obj2.pos.y = 400;
-			// coll.obj2.vel.y = 0.25;
 			// console.log('collission');
 		});
 	}
@@ -156,13 +153,13 @@ class GamePlayingState /* extends GameBase*/ {
 
 		let collisions = this.getCollisions(game.walls.concat(game.balls), deltaTime);
 		while (collisions.length > 0) {
-			let firstCollision = collisions.unshift()
+			let firstCollision = collisions.unshift();
 			this.doUpdate(firstCollision.time);
 			this.handleCollide(collisions);
 			deltaTime -= firstCollision.time;
 			collisions = this.getCollisions(game.walls.concat(game.balls), deltaTime);
 		}
-        this.doUpdate(deltaTime);
+		this.doUpdate(deltaTime);
 
 		this.utils.detectCollisions2(this.game.balls);
 		// UTILS.detectCollisions(this.game.balls);
@@ -181,7 +178,7 @@ class Game {
 		this.gameState = new GamePendingState(this);
 		this.utils = new Utils();
 		this.listeners = [];
-		this.numBalls = 1;
+		this.numBalls = 2;
 
 		cnv.addEventListener('mousedown', ballClickHandler);
 		// cnv.addEventListener('keydown', keyboardHandler);
@@ -190,7 +187,6 @@ class Game {
 
 		function ballClickHandler(event) {
 			let clickPos = me.utils.getClickPosition(event);
-			// console.log('click pos', clickPos);
 			// for (let i = 0; i < me.balls.length; i++) {
 			for (let i = me.balls.length - 1; i >= 0; i--) {
 				let ball = me.balls[i];
@@ -206,7 +202,7 @@ class Game {
 			if (me.balls.length === 0) {
 				// console.log('game over');
 				me.setGameState(new GameOverState(me));
-							}
+			}
 		}
 
 		// document.addEventListener('keydown', (e) => {
@@ -239,31 +235,34 @@ class Game {
 	}
 	setGameState(gameState) {
 		this.gameState = gameState;
-	for (let i =0; i < this.listeners.length; i++) {
-		this.listeners[i](this.started());
+		for (let i = 0; i < this.listeners.length; i++) {
+			this.listeners[i](this.started());
+		}
 	}
-	}
-	startGame(){
+	startGame() {
 		console.log('start game');
 		let me = this;
 		this.setGameState(new GamePlayingState(this));
-		this.balls= [];
+		this.balls = [];
 		let breakout = 0;
 
 		let dimsEl = document.getElementById('game');
-	// console.log('dims', dimsEl.getBoundingClientRect());
-	let dims = dimsEl.getBoundingClientRect();
+		let dims = dimsEl.getBoundingClientRect();
 		this.width = dims.width;
 		this.height = dims.height;
 		// UTILS.keyControl(new Ball2(100, 150, 25, 'green'));
 
-		this.cnv.width = dims.width
+		this.cnv.width = dims.width;
 		this.cnv.height = dims.height;
-	
-		this.ctx.width = dims.width
+
+		this.ctx.width = dims.width;
 		this.ctx.height = dims.height;
 
-		this.walls =[new Wall(0, null, 1), new Wall(dims.width, null, -1), new Wall(null, 0, 1), new Wall(null, dims.height, -1)];
+		this.walls = [
+			new Wall(0, null, 1),
+			new Wall(dims.width, null, -1),
+			new Wall(null, 0, 1),
+			new Wall(null, dims.height, -1)];
 
 		// let ball1 = new Ball2(130, 100, 25, 'red');
 		// this.balls.push(ball1);
@@ -336,7 +335,7 @@ class Game {
 	}
 
 	draw(ctx) {
-		
+
 		ctx.clearRect(0, 0, this.width, this.height);
 		ctx.fillStyle = 'black';
 		ctx.fillRect(0, 0, this.width, this.height);

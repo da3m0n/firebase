@@ -20,12 +20,12 @@ class Ball2 {
 	}
 
 	update(deltaTime) {
-		
+
 		if (!deltaTime) return;
-	
+
 		let nextX = this.pos.x + this.vel.x * deltaTime;
 
-		// this.pos.x += this.vel.x * deltaTime;
+		this.pos.x += this.vel.x * deltaTime;
 		this.pos.y += this.vel.y * deltaTime;
 
 		// if (nextX > (this.cnvWidth - this.radius)) {
