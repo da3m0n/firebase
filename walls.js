@@ -6,7 +6,7 @@ class Wall {
     }
     
     collides(obj, deltaTime) {
-        if(obj instanceof Ball2) {
+        if (obj instanceof Ball) {
             return obj.collides(this, deltaTime);
         }
         return null;

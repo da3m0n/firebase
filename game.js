@@ -180,31 +180,6 @@ class Game {
 		this.listeners = [];
 		this.numBalls = 2;
 
-		cnv.addEventListener('mousedown', ballClickHandler);
-		// cnv.addEventListener('keydown', keyboardHandler);
-
-		let scoreEl = document.getElementById('pScore');
-
-		function ballClickHandler(event) {
-			let clickPos = me.utils.getClickPosition(event);
-			// for (let i = 0; i < me.balls.length; i++) {
-			for (let i = me.balls.length - 1; i >= 0; i--) {
-				let ball = me.balls[i];
-				if (me.utils.pointInCircle(ball.pos.x, ball.pos.y, clickPos.x, clickPos.y, ball.radius)) {
-					me.score += ball.getBallScore();
-					me.balls.splice(i, 1);
-					break;
-				}
-			}
-			scoreEl.innerHTML = 'Ball Score: ' + me.score;
-
-			// console.log('balls length', me.balls.length);
-			if (me.balls.length === 0) {
-				// console.log('game over');
-				me.setGameState(new GameOverState(me));
-			}
-		}
-
 		// document.addEventListener('keydown', (e) => {
 		//     console.log('keyboard...', e.key, e.code);
 		//     if(e.code === 'ArrowLeft') {
@@ -299,8 +274,34 @@ class Game {
 				}
 
 			}
-			this.balls.push(new Ball2(x, y, ballRadius, this.utils.getRandomColor()));
+			this.balls.push(new Ball(x, y, ballRadius, this.utils.getRandomColor()));
 		}
+
+		cnv.addEventListener('mousedown', ballClickHandler);
+		// cnv.addEventListener('keydown', keyboardHandler);
+
+		let scoreEl = document.getElementById('pScore');
+
+		function ballClickHandler(event) {
+			let clickPos = me.utils.getClickPosition(event);
+			// for (let i = 0; i < me.balls.length; i++) {
+			for (let i = me.balls.length - 1; i >= 0; i--) {
+				let ball = me.balls[i];
+				if (me.utils.pointInCircle(ball.pos.x, ball.pos.y, clickPos.x, clickPos.y, ball.radius)) {
+					me.score += ball.getBallScore();
+					me.balls.splice(i, 1);
+					break;
+				}
+			}
+			scoreEl.innerHTML = 'Ball Score: ' + me.score;
+
+			// console.log('balls length', me.balls.length);
+			if (me.balls.length === 0) {
+				// console.log('game over');
+				me.setGameState(new GameOverState(me));
+			}
+		}
+
 	}
 
 	stopGame() {

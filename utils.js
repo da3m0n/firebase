@@ -178,8 +178,9 @@ class Utils {
 	}
 
 	getClickPosition(event) {
-		const x = event.clientX - cnv.offsetLeft;
-		const y = event.clientY - cnv.offsetTop;
+		let rect = cnv.getBoundingClientRect();
+		const x = event.clientX - rect.left;
+		const y = event.clientY - rect.top;
 		return {x: x, y: y};
 	}
 

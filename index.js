@@ -2,18 +2,16 @@
 // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.3/firebase-app.js";
 
 // firebase.initializeApp(firebaseConfig);
-
-
-let cnv = document.getElementById('canvas');
-let ctx = cnv.getContext('2d');
-
-
 let setup = (function () {
 	let db = null;
 	let pages = null;
 	let utils = null;
 
-	let game = new Game(cnv);
+	this.cnv = document.getElementById('canvas');
+	this.ctx = this.cnv.getContext('2d');
+	this.me = this;
+
+	let game = new Game(this.cnv);
 	let lastTime = null;
 
 	const startBtn = document.getElementById('startBtn');
@@ -23,7 +21,7 @@ let setup = (function () {
 	const startAnimation = () => {
 		lastTime = null;
 		myReq = requestAnimationFrame(gameLoop);
-	}
+	};
 
 	const stopAnimation = () => {
 		cancelAnimationFrame(myReq);
@@ -33,17 +31,16 @@ let setup = (function () {
 	function gameLoop(timestamp) {
 
 		let deltaTime = timestamp - lastTime;
-		if(lastTime === null) {
+		if (lastTime === null) {
 			lastTime = timestamp;
 			myReq = requestAnimationFrame(gameLoop);
 			return;
-		};
+		}
+		;
 		lastTime = timestamp;
 
-
-
 		game.update(deltaTime);
-		game.draw(ctx);
+		game.draw(me.ctx);
 		myReq = requestAnimationFrame(gameLoop);
 	}
 

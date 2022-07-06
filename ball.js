@@ -1,4 +1,4 @@
-class Ball2 {
+class Ball {
 	constructor(posX, posY, radius, col) {
 		let UTILS = new Utils();
 		this.radius = radius;
@@ -8,8 +8,8 @@ class Ball2 {
 		// let cnv = document.getElementById('canvas');
 		this.cnvWidth = cnv.width;
 		this.cnvHeight = cnv.height;
-		// this.vel = new Vector(Math.random() / 5, Math.random() / 5);
-		this.vel = new Vector(0.25, 0.25);
+		this.vel = new Vector(Math.random() / 5, Math.random() / 5);
+		// this.vel = new Vector(0.25, 0.25);
 		this.col = col;
 		this.mass = 1;
 		this.player = false;
